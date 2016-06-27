@@ -1,19 +1,7 @@
-# payhub_sdk
-=========
+/**
+ * Created by Agustin Breit <agustin.breit@silice.biz> on 06/17/16.
+ */
 
-Welcome! In this directory, you'll find the files you need to be able to package up our NodeJs module into your server. 
-<br><br>
-[Download the Master Repo] (https://github.com/payhub/payhubws-public-sdk/archive/master.zip)
-
-## Installation
-
-  npm install payhub_sdk --save 
-  or
-  npm install git://github.com/payhubbuilder/payhub-nodejs-sdk.git
-
-## Usage
-
-```javascript
 var models = require('../lib/model/apiModels');
 
 var trnManager = require('../lib/utils/transactionManager');
@@ -49,18 +37,15 @@ var sale = new models.Sale(merchant,bill,card_data,customer)
 
 var transactionManager = new trnManager.TransactionManager(merchant,WsURL,oauth_token);
 var saleResponse = transactionManager.doSale(sale);
-console.log(saleResponse)
+if(!(saleResponse[0] instanceof errors.Errors)){
+    var saleId = saleResponse.saleResponse.saleId;
+    var getSaleResponse  = transactionManager.getSale(saleId);
+    if(!(getSaleResponse[0]instanceof errors.Errors)){
+        console.log(getSaleResponse);
+    }else{console.log(getSaleResponse[0])}
+}else{console.log(saleResponse[0])}
 
-```
 
-## Tests
 
-  npm test
 
-## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/PayHubSDK. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
-
-## Release History
-
-* 1.0.0 Initial release

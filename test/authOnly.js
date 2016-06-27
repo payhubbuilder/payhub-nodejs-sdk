@@ -1,19 +1,7 @@
-# payhub_sdk
-=========
+/**
+ * Created by Agustin Breit <agustin.breit@silice.biz> on 06/17/16.
+ */
 
-Welcome! In this directory, you'll find the files you need to be able to package up our NodeJs module into your server. 
-<br><br>
-[Download the Master Repo] (https://github.com/payhub/payhubws-public-sdk/archive/master.zip)
-
-## Installation
-
-  npm install payhub_sdk --save 
-  or
-  npm install git://github.com/payhubbuilder/payhub-nodejs-sdk.git
-
-## Usage
-
-```javascript
 var models = require('../lib/model/apiModels');
 
 var trnManager = require('../lib/utils/transactionManager');
@@ -45,22 +33,23 @@ customer.first_name="testJS"
 customer.last_name="testJS"
 customer.email_address="testJS@testJS.com"
 
-var sale = new models.Sale(merchant,bill,card_data,customer)
+var authOnly = new models.AuthOnly(merchant,bill,card_data,customer)
 
 var transactionManager = new trnManager.TransactionManager(merchant,WsURL,oauth_token);
-var saleResponse = transactionManager.doSale(sale);
-console.log(saleResponse)
+var authResponse = transactionManager.doAuthOnly(authOnly);
+if(!(authResponse[0] instanceof errors.Errors)){
+    var trnId = authResponse.authOnlyResponse.transactionId;
+    var capture = new models.Capture(merchant,bill,trnId)
+    var captureResponse  = transactionManager.doCapture(capture);
+    if(!(captureResponse[0]instanceof errors.Errors)){
+        console.log(captureResponse);
+    }else{console.log(captureResponse[0])}
+}else{console.log(authResponse[0])}
 
-```
 
-## Tests
 
-  npm test
 
-## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/PayHubSDK. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 
-## Release History
 
-* 1.0.0 Initial release
+
