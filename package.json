@@ -1,6 +1,6 @@
 {
   "name": "payhub_sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A library providing methods for running transactions by using your payhub credentials",
   "main": "index.js",
   "scripts": {
